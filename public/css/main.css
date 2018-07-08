@@ -1,0 +1,9 @@
+img.img.img-circle {
+    border-radius: 30px;
+}
+
+strong.card-title>a {
+    border: none;
+    color: #ffffff;
+    padding: 2px;
+}
