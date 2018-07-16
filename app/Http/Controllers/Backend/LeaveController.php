@@ -14,11 +14,25 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function officeLeaves()
     {
-        $leaves = Leave::all();
-        $employees = Employee::where('status', 0)->get();
-        return view('backend.leave.index', compact('leaves', 'employees'));
+        $leaves = Leave::where('staffSta', 0)->get();
+        $employees = Employee::where('staff', 0)->get();
+        return view('backend.leave.officeLeaves', compact('leaves', 'employees'));
+    }
+
+    public function floorLeaves()
+    {
+        $leaves = Leave::where('staffSta', 1)->get();
+        $employees = Employee::where('staff', 1)->get();
+        return view('backend.leave.floorLeaves', compact('leaves', 'employees'));
+    }
+
+    public function workerLeaves()
+    {
+        $leaves = Leave::where('staffSta', 2)->get();
+        $employees = Employee::where('staff', 2)->get();
+        return view('backend.leave.workerLeaves', compact('leaves', 'employees'));
     }
 
     /**
@@ -42,13 +56,20 @@ class LeaveController extends Controller
         // dd($request->all());
         $this->validate($request, [
             'employee_id' => 'required',
+            'staffSta' => 'required',
             'from_date' => 'required',
             'to_date' => 'required',
             'reason' => 'required'
         ]);
 
         Leave::create($request->all());
-        return redirect()->route('supply.index')->with('success', 'Employee leave created have been successfully!');
+        if ($request->staffSta == 0) {
+            return redirect()->route('officeLeaves')->with('success', 'Office staff leave created have been successfully!');
+        }elseif ($request->staffSta == 1) {
+            return redirect()->route('floorLeaves')->with('success', 'Floor staff leave created have been successfully!');
+        }else{
+            return redirect()->route('workerLeaves')->with('success', 'Worker staff leave created have been successfully!');
+        }
     }
 
     /**

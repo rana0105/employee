@@ -17,6 +17,7 @@ class Employee extends Model
         'present_address',	
         'permanent_address',	
         'image',
+        'staff',
         'status'
     ];
 }

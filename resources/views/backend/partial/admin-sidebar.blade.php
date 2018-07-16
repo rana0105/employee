@@ -29,8 +29,19 @@
                     </li>
                     @endcan --}}
                     @can('view_employee')
-                    <li>
-                        <a href="{{route('employees.index')}}"><i class="menu-icon fa fa-image"></i>Employee</a>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Employee</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('officeStaff')}}">Office Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('floorStaff')}}">Floor Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('worker')}}">Worker</a>
+                            </li>
+                        </ul>
                     </li>
                     @endcan
                     <li class="menu-item-has-children dropdown">
@@ -48,7 +59,7 @@
                             @endcan
                             @can('view_product')
                             <li>
-                                <i class="menu-icon fa fa-plus-square"></i><a href="{{route('product.index')}}">Store</a>
+                                <i class="menu-icon fa fa-plus-square"></i><a href="{{route('stores.index')}}">Store</a>
                             </li>
                             @endcan
                             @can('view_supply')
@@ -59,13 +70,35 @@
                         </ul>
                     </li>
                     @can('view_leave')
-                    <li>
-                        <a href="{{route('leave.index')}}"><i class="menu-icon fa fa-plus-square"></i>Leaves</a>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Leaves</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('officeLeaves')}}">Office Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('floorLeaves')}}">Floor Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('workerLeaves')}}">Worker</a>
+                            </li>
+                        </ul>
                     </li>
                     @endcan
                     @can('view_salary')
-                     <li>
-                        <a href="{{route('salary.index')}}"><i class="menu-icon fa fa-plus-square"></i>Salary</a>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Salary</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('officeSalary')}}">Office Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('floorSalary')}}">Floor Staff</a>
+                            </li>
+                            <li>
+                                <i class="menu-icon fa fa-user"></i><a href="{{route('workerSalary')}}">Worker</a>
+                            </li>
+                        </ul>
                     </li>
                     @endcan
                 </ul>

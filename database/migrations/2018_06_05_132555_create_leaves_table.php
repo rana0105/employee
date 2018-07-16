@@ -16,6 +16,7 @@ class CreateLeavesTable extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('employee_id')->unsigned()->index();
+            $table->integer('staffSta')->nullable();
             $table->date('from_date')->nullable();
             $table->date('to_date')->nullable();
             $table->text('reason')->nullable();

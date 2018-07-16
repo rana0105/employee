@@ -14,11 +14,25 @@ class SalaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function officeSalary()
     {
-        $salaries = Salary::all();
-        $employees = Employee::where('status', 0)->get();
-        return view('backend.salary.index', compact('salaries', 'employees'));
+        $salaries = Salary::where('satffSalary', 0)->get();
+        $employees = Employee::where('staff', 0)->get();
+        return view('backend.salary.officeSalary', compact('salaries', 'employees'));
+    }
+
+    public function floorSalary()
+    {
+        $salaries = Salary::where('satffSalary', 1)->get();
+        $employees = Employee::where('staff', 1)->get();
+        return view('backend.salary.floorSalary', compact('salaries', 'employees'));
+    }
+
+    public function workerSalary()
+    {
+        $salaries = Salary::where('satffSalary', 2)->get();
+        $employees = Employee::where('staff', 2)->get();
+        return view('backend.salary.workerSalary', compact('salaries', 'employees'));
     }
 
     /**
@@ -48,6 +62,7 @@ class SalaryController extends Controller
     {
         $this->validate($request, [
             'employee_id' => 'required',
+            'satffSalary' => 'required',
             'date' => 'required',
             'month' => '',
             'year' => '',
@@ -72,8 +87,14 @@ class SalaryController extends Controller
                 'year' => $year,
                 'total' => $total,
             ]);
-        //return redirect()->route('salary.show', $salary->id)->with('success', 'Data have been save!');
-        return redirect()->route('salary.index')->with('success', 'Employee salary created have been successfully!');
+        if ($request->satffSalary == 0) {
+            return redirect()->route('officeSalary')->with('success', 'Office Staff salary created have been successfully!');
+        }elseif ($request->satffSalary == 1) {
+            return redirect()->route('floorSalary')->with('success', 'Floor Staff salary created have been successfully!');
+        }else{
+            return redirect()->route('workerSalary')->with('success', 'Worker salary created have been successfully!');
+        }
+        
     }
 
     /**
@@ -92,9 +113,20 @@ class SalaryController extends Controller
     }
     public function reportShow(Request $request)
     {
-        $salarys = Salary::where('month', $request->month)
+        if ($request->staff == 0) {
+            $salarys = Salary::where('satffSalary', 0)->where('month', $request->month)
                 ->where('year', $request->year)
                 ->get();
+        }elseif ($request->staff == 1) {
+            $salarys = Salary::where('satffSalary', 1)->where('month', $request->month)
+                ->where('year', $request->year)
+                ->get();
+        }else{
+            $salarys = Salary::where('satffSalary', 2)->where('month', $request->month)
+                ->where('year', $request->year)
+                ->get();
+        }
+        
         $pdf = \PDF::loadView('backend.salary.salaryReport', [
             'salarys' => $salarys,
             'month' => $request->month,

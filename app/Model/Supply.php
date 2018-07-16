@@ -13,6 +13,7 @@ class Supply extends Model
         'color',
         'order_quantity',
         'size',
+        'remark',
         'from_date',
         'to_date',
         'supply_date'

@@ -9,6 +9,7 @@ class Leave extends Model
     protected $fillable = [
         'employee_id',
         'from_date',
+        'staffSta',
         'to_date',
         'reason'
     ];

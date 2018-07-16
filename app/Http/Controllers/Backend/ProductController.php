@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Model\DeliveryDate;
 use App\Model\Product;
 use App\Model\ProductCategory;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class ProductController extends Controller
         ]);
 
         Product::create($request->all());
-        return redirect()->route('product.index')->with('success', 'Product Information created successfully !');
+        return redirect()->route('stores.index')->with('success', 'Product Information created successfully !');
     }
 
     /**
@@ -93,7 +94,7 @@ class ProductController extends Controller
         ]);
         $product = Product::find($id);
         $product->update($request->all());
-        return redirect()->route('product.index')->with('success', 'Product Information Updated successfully !');
+        return redirect()->route('stores.index')->with('success', 'Product Information Updated successfully !');
     }
 
     /**
@@ -105,6 +106,26 @@ class ProductController extends Controller
     public function destroy($id)
     {
         Product::find($id)->delete();
-        return redirect()->route('product.index')->with('success', 'Product Information Deleted successfully !');
+        return redirect()->route('stores.index')->with('success', 'Product Information Deleted successfully !');
+    }
+
+    public function deliveryDate(Request $request)
+    {
+        $this->validate($request, [
+            'product_id' => 'required',
+            'delivery_date' => 'required',
+            'delivery_quantity' => 'required'
+        ]);
+        //dd($request->all());
+        $chekcQ = Product::where('id', $request->product_id)->first();
+
+        if($chekcQ->stock >= $request->delivery_quantity) {
+            DeliveryDate::create($request->all());
+            $lastStock = $chekcQ->stock - $request->delivery_quantity;
+            $chekcQ->where('id', $request->product_id)->update(['stock'=> $lastStock]);
+            return redirect()->route('stores.index')->with('success', 'Product Stock information data have been save!');
+        }else{
+            return redirect()->route('stores.index')->with('danger', 'This product amount not available for delivered!');
+        }
     }
 }

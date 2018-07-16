@@ -16,11 +16,17 @@ class CreateSalariesTable extends Migration
         Schema::create('salaries', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('employee_id')->unsigned()->index();
+            $table->integer('satffSalary')->nullable();
             $table->date('date')->nullable();
             $table->string('month')->nullable();
             $table->string('year')->nullable();
             $table->integer('basic')->nullable();
-            $table->integer('other')->nullable();
+            $table->integer('tifin')->nullable();
+            $table->integer('over_time')->nullable();
+            $table->integer('ot_taka')->nullable();
+            $table->integer('abs_day')->nullable();
+            $table->integer('abs_taka')->nullable();
+            $table->integer('advanced')->nullable();
             $table->integer('total')->nullable();
             $table->timestamps();
         });

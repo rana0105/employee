@@ -63,7 +63,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($employees as $employee)
+                                  @foreach($floorStaffs as $employee)
                                   <tr>
                                     <td class="imaname"><p class="imgnnn"><img src="{{ asset('/uploads/'. $employee->image) }}" alt="{{ $employee->image }}" width="60" height="60" class="img img-circle"> {{ $employee->name }}</p></td>
                                     <td>{{ $employee->designation }}</td>

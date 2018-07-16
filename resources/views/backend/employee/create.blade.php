@@ -14,7 +14,7 @@
                     <ol class="breadcrumb text-right">
                         <li><a href="{{url('/dashboard')}}">Dashboard</a></li>
                         @can('view_employee')
-                        <li><a href="{{route('employees.index')}}">Employees</a></li>
+                        <li><a href="{{ url()->previous() }}">Employees</a></li>
                         @endcan
                         <li class="active">Create</li>
                     </ol>
@@ -130,6 +130,16 @@
                                             <strong>{{ $errors->first('permanent_address') }}</strong>
                                         </span>
                                     @endif
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Staff Status:</label>
+                                <div class="col-sm-8">
+                                    <select name="staff"  class="form-control">
+                                        @foreach(config('statusStaff.reverse_status') as $key => $staff)
+                                            <option value="{{ $key }}">{{ $staff }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">

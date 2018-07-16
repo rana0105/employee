@@ -14,10 +14,22 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function officeStaff()
     {
-        $employees = Employee::all();
-        return view('backend.employee.index', compact('employees'));
+        $officeStaffs = Employee::where('staff', 0)->get();
+        return view('backend.employee.officeStaff', compact('officeStaffs'));
+    }
+
+    public function floorStaff()
+    {
+        $floorStaffs = Employee::where('staff', 1)->get();
+        return view('backend.employee.floorStaff', compact('floorStaffs'));
+    }
+
+    public function worker()
+    {
+        $workers = Employee::where('staff', 2)->get();
+        return view('backend.employee.worker', compact('workers'));
     }
 
     /**
@@ -56,7 +68,13 @@ class EmployeeController extends Controller
             $employeeImg = Storage::disk('uploads')->put('employee',$image);
         }
         Employee::create($request->except('image')+['image' => $employeeImg]);
-        return redirect()->route('employees.index')->with('success', 'Employee information created successfully !');
+        if($request->staff == 0){
+            return redirect()->route('officeStaff')->with('success', 'Office Staff Information upadated successfully !');
+        }elseif($request->staff == 1){
+            return redirect()->route('floorStaff')->with('success', 'Floor Staff Information upadated successfully !');
+        }else{
+            return redirect()->route('worker')->with('success', 'Worker Information upadated successfully !');
+        }
     }
 
     /**
@@ -104,7 +122,13 @@ class EmployeeController extends Controller
         }
         // employee info update
         $employee->update($request->except('image')+['image' => $employeeImg]);
-        return redirect()->route('employees.index')->with('success', 'Employee Information upadated successfully !');
+        if($request->staff == 0){
+            return redirect()->route('officeStaff')->with('success', 'Office Staff Information upadated successfully !');
+        }elseif($request->staff == 1){
+            return redirect()->route('floorStaff')->with('success', 'Floor Staff Information upadated successfully !');
+        }else{
+            return redirect()->route('worker')->with('success', 'Worker Information upadated successfully !');
+        }
     }
 
     /**

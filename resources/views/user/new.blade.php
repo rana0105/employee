@@ -2,7 +2,7 @@
 @section('content')
  <div class="col-md-4 col-lg-6 main">
         <nav class="breadcrumb">
-          <a class="breadcrumb-item" href="{{ url('dashboard') }}">Home</a>
+          <a class="breadcrumb-item" href="{{ url('dashboard') }}">Dashboard</a>
         </nav>
         <div class="row">
         <div class="col-md-5">

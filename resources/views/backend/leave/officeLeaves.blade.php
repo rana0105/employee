@@ -101,6 +101,7 @@
                                       @endif
                                     </div>
                                   </div>
+                                  <input type="hidden" name="staffSta" value="0">
                                   <div class="form-group row">
                                     <label for="from_date" class="col-sm-3 col-form-label">From Date</label>
                                     <div class="col-sm-8">

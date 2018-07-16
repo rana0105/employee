@@ -13,7 +13,7 @@
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
                         <li><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                        <li><a href="{{route('product.index')}}">Product</a></li>
+                        <li><a href="{{route('stores.index')}}">Product</a></li>
                         <li class="active">Update</li>
                     </ol>
                 </div>
@@ -29,9 +29,9 @@
                             <strong class="card-title">Update</strong>
                         </div>
                         <div class="card-body">
-                        {!! Form::open(['route' => ['product.update', $product->id ], 'method' => 'PUT'])!!}
+                        {!! Form::open(['route' => ['stores.update', $product->id ], 'method' => 'PUT'])!!}
                             {{csrf_field()}}
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                               <label for="product_category_id" class="col-sm-2 col-form-label">Name</label>
                               <div class="col-sm-8">
                                 {{ Form::select('product_category_id', $cate, $product->product_category_id , ["class" => 'form-control'])}}
@@ -41,7 +41,7 @@
                                     </span>
                                 @endif
                               </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
                               <label for="name" class="col-sm-2 col-form-label">Name</label>
                               <div class="col-sm-8">
@@ -60,6 +60,17 @@
                                 @if ($errors->has('quantity'))
                                     <span class="help-block text-danger">
                                         <strong>{{ $errors->first('quantity') }}</strong>
+                                    </span>
+                                @endif
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="remark" class="col-sm-2 col-form-label">Remarks</label>
+                              <div class="col-sm-8">
+                                <input type="text" name="remark" class="form-control" value="{{ $product->remark }}">
+                                @if ($errors->has('remark'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('remark') }}</strong>
                                     </span>
                                 @endif
                               </div>

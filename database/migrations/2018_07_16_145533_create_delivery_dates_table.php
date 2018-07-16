@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSizeQuantitiesTable extends Migration
+class CreateDeliveryDatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateSizeQuantitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('size_quantities', function (Blueprint $table) {
+        Schema::create('delivery_dates', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product_id')->unsigned()->index();
-            $table->integer('supply_id')->unsigned()->index();
-            $table->integer('size_id')->unsigned()->index();
-            $table->integer('size_quantity')->nullable();
-            $table->integer('last_quantity')->nullable();
+            $table->date('delivery_date')->nullable();
+            $table->integer('delivery_quantity')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateSizeQuantitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('size_quantities');
+        Schema::dropIfExists('delivery_dates');
     }
 }

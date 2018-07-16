@@ -17,7 +17,10 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->integer('product_category_id')->unsigned()->index();
             $table->string('name')->nullable();
-            $table->integer('quantity')->nullable();
+            $table->string('quantity')->nullable();
+            $table->string('stock')->nullable();
+            $table->string('delivery')->nullable();
+            $table->string('remark')->nullable();
             $table->timestamps();
         });
     }

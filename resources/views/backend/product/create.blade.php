@@ -14,7 +14,7 @@
                     <ol class="breadcrumb text-right">
                         <li><a href="{{url('/dashboard')}}">Dashboard</a></li>
                         @can('view_product')
-                        <li><a href="{{route('product.index')}}">Product</a></li>
+                        <li><a href="{{route('stores.index')}}">Product</a></li>
                         @endcan
                         <li class="active">Create</li>
                     </ol>
@@ -31,9 +31,9 @@
                             <strong class="card-title">Create</strong>
                         </div>
                         <div class="card-body">
-                          <form action="{{ route('product.store') }}" method="POST">
+                          <form action="{{ route('stores.store') }}" method="POST">
                             {{csrf_field()}}
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                               <label for="product_category_id" class="col-sm-2 col-form-label">Category</label>
                               <div class="col-sm-8">
                                 <select name="product_category_id" class="livesearch form-control" required="">
@@ -48,7 +48,7 @@
                                     </span>
                                 @endif
                               </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
                               <label for="name" class="col-sm-2 col-form-label">Name</label>
                               <div class="col-sm-8">

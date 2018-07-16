@@ -13,7 +13,7 @@
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
                         <li><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                        <li><a href="{{route('employees.index')}}">Employees</a></li>
+                        <li><a href="{{ url()->previous() }}">Employees</a></li>
                         <li class="active">Edit</li>
                     </ol>
                 </div>
@@ -141,6 +141,16 @@
                                 @endif
                                 <img class="img img-thumbnail" style="margin-top: 3px;" src="{{ asset('/uploads/'. $employee->image) }}" alt="{{ $employee->image }}" width="50" height="50">
                               </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Staff Status:</label>
+                                <div class="col-sm-8">
+                                    <select name="staff"  class="form-control">
+                                        @foreach(config('statusStaff.reverse_status') as $key => $staff)
+                                            <option value="{{ $key }}" {{ $key == $employee->staff ? 'selected':'' }}>{{ $staff }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Employee Status:</label>

@@ -8,6 +8,7 @@ class Salary extends Model
 {
     protected $fillable = [
         'employee_id',
+        'satffSalary',
         'date',
         'month',
         'year',

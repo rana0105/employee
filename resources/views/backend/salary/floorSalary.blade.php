@@ -63,6 +63,7 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                    <input type="hidden" name="staff" value="1">
                                                     <div class="col-md-4">
                                                         <select class="form-control" name="year" title=" " required="" style="margin-bottom: 2%;">
                                                             @for($i = 2015; $i <= 2030; $i++)
@@ -168,6 +169,7 @@
                                         @endif
                                     </div>
                                     </div>
+                                    <input type="hidden" name="satffSalary" value="1">
                                     <div class="form-group row">
                                     <label for="date" class="col-sm-3 col-form-label">Date</label>
                                     <div class="col-sm-8">

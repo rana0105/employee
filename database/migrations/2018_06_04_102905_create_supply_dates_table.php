@@ -17,7 +17,9 @@ class CreateSupplyDatesTable extends Migration
             $table->increments('id');
             $table->integer('supply_id')->unsigned()->index();
             $table->date('supply_date')->nullable();
+            $table->date('size_id')->nullable();
             $table->integer('supply_quantity')->nullable();
+            $table->date('delivery_no')->nullable();
             $table->timestamps();
         });
     }
