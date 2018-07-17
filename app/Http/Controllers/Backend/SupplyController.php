@@ -121,8 +121,9 @@ class SupplyController extends Controller
         $sizeQtn = SizeQuantity::where('supply_id', $supply->id)->get();
         $sizeQtnpro = SizeQuantity::where('supply_id', $supply->id)->first();
         $products = Product::all();
+        $sizes = Size::all();
 
-        return view('backend.supply.edit', compact('supply', 'sizeQtn', 'sizeQtnpro', 'products'));
+        return view('backend.supply.edit', compact('supply', 'sizeQtn', 'sizeQtnpro', 'products', 'sizes'));
     }
 
     /**
@@ -134,7 +135,50 @@ class SupplyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'product_id' => 'required',
+            'buyer_name' => 'required',
+            'reference_no' => 'required',
+            'order_no' => 'required',
+            'color' => 'required',
+            'size' => 'required',
+            'order_quantity' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required'
+        ]);
+        $supply = Supply::find($id);
+        $quantity = $request->order_quantity;
+        $sizes = $request->size;
+        $supply->update($request->except(['supply_date', 'size', 'order_quantity']));
+        if($supply){
+            foreach ($request->size as $key => $size) {
+                $sizeQuantity = SizeQuantity::where('supply_id', $id)->get();
+                if ($sizeQuantity->count() == count($request->order_quantity)) {
+                    foreach ($sizeQuantity as $keys => $value) {
+                        if ($value) {
+                            $value->supply_id = $supply->id;
+                            $value->product_id = $request->product_id;
+                            $value->size_id = $sizes[$keys];
+                            $value->size_quantity = $quantity[$keys];
+                            $value->last_quantity = $quantity[$keys];
+                            $value->save();
+                            return redirect()->route('supply.index')->with('success', 'Data have been updated!');
+                        }else{
+                            return redirect()->route('supply.index')->with('danger', 'Data have been not updated!');
+                        }
+                    }
+                }else{
+                    $quantitySize = new SizeQuantity();
+                    $quantitySize->supply_id = $supply->id;
+                    $quantitySize->product_id = $request->product_id;
+                    $quantitySize->size_id = $size;
+                    $quantitySize->size_quantity = $quantity[$key];
+                    $quantitySize->last_quantity = $quantity[$key];
+                    $quantitySize->save();
+                    return redirect()->route('supply.index')->with('success', 'Data have been updated!');
+                }
+            }
+        }
     }
 
     /**

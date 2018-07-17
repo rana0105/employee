@@ -35,9 +35,11 @@
                                 <label for="product_id" class="col-sm-3 col-form-label">Product</label>
                                 <div class="col-sm-8">
                                 <select name="product_id" id="product_id" class="livesearch form-control" required="">
-                                    @foreach($products as $key => $product)
-                                        <option value="{{ $key }}" {{ $key == $sizeQtnpro->product_id ? 'selected':'' }}>{{ $product->name }}</option>
-                                    @endforeach
+                                    @if(sizeof($sizeQtnpro)>0)
+                                        @foreach($products as $key => $product)
+                                            <option value="{{ $product->id }}" {{ $product->id == $sizeQtnpro->product_id ? 'selected':'' }}>{{ $product->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 
                                 @if ($errors->has('product_id'))
@@ -98,7 +100,7 @@
                                     <thead>
                                         <th>Size</th>
                                         <th>Quantity</th>
-                                        {{--  <input type="hidden" id="pro" value="{{$sizes}}">  --}}
+                                         <input type="hidden" id="pro" value="{{$sizes}}"> 
                                     <th style="text-align: center;"><a  class="btn btn-success btn-sm addRow"  href="javascript:void(0)" ><i class="fa fa-plus-square fa-lg" aria-hidden="true"></i></a></th>
                                     </thead>
                                     <tbody>
@@ -145,18 +147,21 @@
 
     <?php
     $myArr = [];
-    foreach($sizeQtn as $arr){
-        $myArr[] = ['supply_id' => $arr->supply_id, 'size_id'=> $arr->size_id, 'size_quantity' => $arr->size_quantity, 'sizeName' => $arr->sizeName->name] ;   
+    if(sizeof($sizeQtn)>0){
+        foreach($sizeQtn as $arr){
+            $myArr[] = ['supply_id' => $arr->supply_id, 'size_id'=> $arr->size_id, 'size_quantity' => $arr->size_quantity, 'sizeName' => $arr->sizeName->name] ;   
+        }
     }
     $myjson = json_encode($myArr);
 
     ?>
-    <input type="text" id="json" value="{{$myjson}}">
+    <input type="hidden" id="json" value="{{$myjson}}">
 @endsection
 @section('script')
 <script>
         $(document).ready(function() {
            var jsonVal = JSON.parse($('#json').val());
+           var pro = JSON.parse($('#pro').val());
            //console.log(jsonVal[0]);
            $('.addRow').on('click', function(){
             var pro = $('#pro').val();
@@ -166,9 +171,10 @@
             var tr='<tr>'+
                     '<td>'+
                     '<select class="livesearch form-control product-name"  name="size[]" >';
-                      //$.each( pro, function( key, value ) {
-                        tr +='<option value="'+ jsonVal[x].size_id +'">'+ jsonVal[x].sizeName +'</option>';
-                      //});   	
+                      $.each( pro, function( key, value ) {
+                        // tr +='<option value="'+ jsonVal[x].size_id +'">'+ jsonVal[x].sizeName +'</option>';
+                        tr +='<option value="'+  value['id'] +'" ' + (value['id'] === jsonVal[x].size_id ? 'selected' : '') + '>'+ value['name'] +'</option>';
+                      });   	
                tr +=  '</select>'+ 
                  '</td>'+
                     '<td><input type="text" value="'+ jsonVal[x].size_quantity +'" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
@@ -187,17 +193,17 @@
         function addRow(pro)
         {
             var tr='<tr>'+
-                           '<td>'+
-                           '<select class="livesearch form-control product-name"  name="size[]" >'+
+                        '<td>'+
+                        '<select class="livesearch form-control product-name"  name="size[]" >'+
                             '<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
-                             $.each( pro, function( key, value ) {
+                            $.each( JSON.parse(pro), function( key, value ) {
                                tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
-                             });   	
+                             });    
                       tr +=  '</select>'+ 
                         '</td>'+
-                           '<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
-                           '<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
-                           '</tr>';
+                        '<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
+                        '<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
+                        '</tr>';
                 $('#main-tbl tbody').append(tr);
                 $(".livesearch").chosen();
                 

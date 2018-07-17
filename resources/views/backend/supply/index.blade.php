@@ -418,22 +418,22 @@
     } );
 
     function addRow(pro)
-	{
-		var tr='<tr>'+
-	   				'<td>'+
-	   				'<select class="livesearch form-control product-name"  name="size[]" >'+
-                    	'<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
-                     	$.each( JSON.parse(pro), function( key, value ) {
-						   tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
-						 });   	
-        		  tr +=  '</select>'+ 
-            		'</td>'+
-	   				'<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
-	   				'<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
-	   				'</tr>';
-			$('#main-tbl tbody').append(tr);
-			$(".livesearch").chosen();
-			
-	};
+  	{
+  		var tr='<tr>'+
+  	   				'<td>'+
+  	   				'<select class="livesearch form-control product-name"  name="size[]" >'+
+                      	'<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
+                       	$.each( JSON.parse(pro), function( key, value ) {
+  						   tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
+  						 });   	
+          		  tr +=  '</select>'+ 
+              		'</td>'+
+  	   				'<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
+  	   				'<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
+  	   				'</tr>';
+  			$('#main-tbl tbody').append(tr);
+  			$(".livesearch").chosen();
+  			
+  	};
 </script>
 @endsection
