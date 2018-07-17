@@ -117,7 +117,12 @@ class SupplyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $supply = Supply::find($id);
+        $sizeQtn = SizeQuantity::where('supply_id', $supply->id)->get();
+        $sizeQtnpro = SizeQuantity::where('supply_id', $supply->id)->first();
+        $products = Product::all();
+
+        return view('backend.supply.edit', compact('supply', 'sizeQtn', 'sizeQtnpro', 'products'));
     }
 
     /**

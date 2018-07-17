@@ -45,8 +45,8 @@
                               <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" href="#"><i class="fa fa-plus"></i>Add</a>
                             @endcan
                           </div>
-                      <div class="card-body table-responsive">
-                        <table id="membersTable" class="table  table-bordered " cellspacing="0" width="100%">
+                      <div class="card-body">
+                        <table id="membersTable" class="table table-bordered display nowrap" cellspacing="0" width="100%">
                           <thead>
                             <tr>
                               <th style="display: none;">#</th>
@@ -126,7 +126,7 @@
                               </td>
                               <td>
                                 <div class="btn-group">
-                                      <a class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                      <a class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" href="#" >
                                           <span class="caret"><i class="fa fa-plus"></i></i></span>
                                       </a>
                                       <ul class="dropdown-menu style1">
@@ -175,7 +175,18 @@
                                 </div>
                               </td>
                               <td>Remark</td>
-                              <td>Edit/Delete</td>
+                              <td>
+                                @can('edit_supply')
+                                <a href="{{ route('supply.edit', $supply->id) }}">
+                                    <button class="btn btn-style btn-small btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                </a>
+                                @endcan
+                                @can('delete_supply')
+                                {!! Form::open(['route' => ['supply.destroy', $supply->id ], 'method' => 'DELETE', 'class'=>'delete_form', 'style'=>'display:inline' ])!!}
+                                    <button class="btn btn-style btn-small btn-danger delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                {!! Form::close() !!}
+                                @endcan
+                              </td>
                               @endforeach
                             </tr>
                           </tbody>
@@ -196,130 +207,130 @@
               </button>
           </div>
           <div class="modal-body">
-                  <div class="card-body">
-                          <form action="{{ route('supply.store') }}" method="POST">
-                            {{csrf_field()}}
-                            <div class="form-group row">
-                              <label for="product_id" class="col-sm-3 col-form-label">Product</label>
-                              <div class="col-sm-8">
-                                <select name="product_id" id="product_id" class="livesearch form-control" required="">
-                                  <option value="0" disabled="true" selected="ture"></option>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('product_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('product_id') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="buyer_name" class="col-sm-3 col-form-label">Buyer Name</label>
-                              <div class="col-sm-8">
-                                <input type="text" name="buyer_name" class="form-control" id="buyer_name" placeholder="buyer_name" required="">
-                                @if ($errors->has('buyer_name'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('buyer_name') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="reference_no" class="col-sm-3 col-form-label">Reference Name</label>
-                              <div class="col-sm-8">
-                                <input type="text" name="reference_no" class="form-control" id="reference_no" placeholder="reference_name" required="">
-                                @if ($errors->has('reference_no'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('reference_no') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="order_no" class="col-sm-3 col-form-label">Order No/FO No</label>
-                              <div class="col-sm-8">
-                                <input type="text" name="order_no" class="form-control" id="order_no" placeholder="order_no" required="">
-                                @if ($errors->has('order_no'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('order_no') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="color" class="col-sm-3 col-form-label">Color</label>
-                              <div class="col-sm-8">
-                                <input type="text" name="color" class="form-control" id="color" placeholder="color" required="">
-                                @if ($errors->has('color'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('color') }}</strong>
-                                    </span>
-                                @endif
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="size" class="col-sm-3 col-form-label">Size</label>
-                              <div class="col-sm-8">
-                                <table class="table table-responsive table-bordered">
-                                  <thead>
-                                      <th>Size</th>
-                                      <th>Quantity</th>
-                                      <input type="hidden" id="pro" value="{{$sizes}}">
-                                   <th style="text-align: center;"><a  class="btn btn-success btn-sm addRow"  href="javascript:void(0)" ><i class="fa fa-plus-square fa-lg" aria-hidden="true"></i></a></th>
-                                  </thead>
-                                  <tbody>
-                                      <tr>
-                                          <td style="width: 250px;">
-                                              <select name="size[]" id="size" class="livesearch form-control" required="">
-                                                  <option value="0" disabled="true" selected="ture"></option>
-                                                      @foreach($sizes as $size)
-                                                          <option value="{{ $size->id }}">{{ $size->name }}</option>
-                                                      @endforeach
-                                              </select>
-                                              @if ($errors->has('size'))
-                                                  <span class="help-block text-danger">
-                                                      <strong>{{ $errors->first('size') }}</strong>
-                                                  </span>
-                                              @endif
-                                          </td>
-                                          <td><input type="text" name="order_quantity[]" class="form-control qtn"></td>
-                                          <td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                                  <label for="from_date" class="col-sm-3 col-form-label">From Date</label>
-                                  <div class="col-sm-8">
-                                    <input type="date" name="from_date" class="form-control" id="from_date" placeholder="from_date" required="">
-                                    @if ($errors->has('from_date'))
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('from_date') }}</strong>
-                                        </span>
-                                    @endif
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                      <label for="to_date" class="col-sm-3 col-form-label">To Date</label>
-                                      <div class="col-sm-8">
-                                        <input type="date" name="to_date" class="form-control" id="to_date" placeholder="to_date" required="">
-                                        @if ($errors->has('to_date'))
+                <div class="card-body">
+                    <form action="{{ route('supply.store') }}" method="POST">
+                    {{csrf_field()}}
+                    <div class="form-group row">
+                        <label for="product_id" class="col-sm-3 col-form-label">Product</label>
+                        <div class="col-sm-8">
+                        <select name="product_id" id="product_id" class="livesearch form-control" required="">
+                            <option value="0" disabled="true" selected="ture"></option>
+                            @foreach($products as $product)
+                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('product_id'))
+                            <span class="help-block text-danger">
+                                <strong>{{ $errors->first('product_id') }}</strong>
+                            </span>
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="buyer_name" class="col-sm-3 col-form-label">Buyer Name</label>
+                        <div class="col-sm-8">
+                        <input type="text" name="buyer_name" class="form-control" id="buyer_name" placeholder="buyer_name" required="">
+                        @if ($errors->has('buyer_name'))
+                            <span class="help-block text-danger">
+                                <strong>{{ $errors->first('buyer_name') }}</strong>
+                            </span>
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="reference_no" class="col-sm-3 col-form-label">Reference Name</label>
+                        <div class="col-sm-8">
+                        <input type="text" name="reference_no" class="form-control" id="reference_no" placeholder="reference_name" required="">
+                        @if ($errors->has('reference_no'))
+                            <span class="help-block text-danger">
+                                <strong>{{ $errors->first('reference_no') }}</strong>
+                            </span>
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="order_no" class="col-sm-3 col-form-label">Order No/FO No</label>
+                        <div class="col-sm-8">
+                        <input type="text" name="order_no" class="form-control" id="order_no" placeholder="order_no" required="">
+                        @if ($errors->has('order_no'))
+                            <span class="help-block text-danger">
+                                <strong>{{ $errors->first('order_no') }}</strong>
+                            </span>
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="color" class="col-sm-3 col-form-label">Color</label>
+                        <div class="col-sm-8">
+                        <input type="text" name="color" class="form-control" id="color" placeholder="color" required="">
+                        @if ($errors->has('color'))
+                            <span class="help-block text-danger">
+                                <strong>{{ $errors->first('color') }}</strong>
+                            </span>
+                        @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="size" class="col-sm-3 col-form-label">Size</label>
+                        <div class="col-sm-8">
+                        <table id="main-tbl"class="table table-responsive table-bordered">
+                            <thead>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <input type="hidden" id="pro" value="{{$sizes}}">
+                            <th style="text-align: center;"><a  class="btn btn-success btn-sm addRow"  href="javascript:void(0)" ><i class="fa fa-plus-square fa-lg" aria-hidden="true"></i></a></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="width: 250px;">
+                                        <select name="size[]" id="size" class="livesearch form-control" required="">
+                                            <option value="0" disabled="true" selected="ture"></option>
+                                                @foreach($sizes as $size)
+                                                    <option value="{{ $size->id }}">{{ $size->name }}</option>
+                                                @endforeach
+                                        </select>
+                                        @if ($errors->has('size'))
                                             <span class="help-block text-danger">
-                                                <strong>{{ $errors->first('to_date') }}</strong>
+                                                <strong>{{ $errors->first('size') }}</strong>
                                             </span>
                                         @endif
-                                      </div>
-                                    </div>
-                            <div class="form-group row">
-                              <div class="col-sm-10">
-                                <button type="submit" class="btn btn-primary">Create</button>
-                              </div>
-                            </div>
-                          </form>
+                                    </td>
+                                    <td><input type="text" name="order_quantity[]" class="form-control qtn"></td>
+                                    <td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         </div>
+                    </div>
+                    <div class="form-group row">
+                            <label for="from_date" class="col-sm-3 col-form-label">From Date</label>
+                            <div class="col-sm-8">
+                            <input type="date" name="from_date" class="form-control" id="from_date" placeholder="from_date" required="">
+                            @if ($errors->has('from_date'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('from_date') }}</strong>
+                                </span>
+                            @endif
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                                <label for="to_date" class="col-sm-3 col-form-label">To Date</label>
+                                <div class="col-sm-8">
+                                <input type="date" name="to_date" class="form-control" id="to_date" placeholder="to_date" required="">
+                                @if ($errors->has('to_date'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('to_date') }}</strong>
+                                    </span>
+                                @endif
+                                </div>
+                            </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
           </div>
           <div class="modal-footer">
           </div>
@@ -332,7 +343,10 @@
     ul.dropdown-menu.style1.show {
         padding: 15px;
     }
-
+    
+    .content {
+        width: 80vw;
+    }
     
     .chosen-container{
       width: 100% !important;
@@ -340,11 +354,17 @@
 </style>
 @endsection
 @section('script')
+{{--  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>  --}}
 <script>
     $(document).ready(function() {
+        $('.dropdown-toggle').on('show.bs.dropdown',function(){
+            alert('asd');
+        });
         var printCounter = 0;
      
         $('#membersTable').DataTable( {
+            
             dom: 'Bfrtip',
             buttons: [
                 {
@@ -381,7 +401,8 @@
                     }
                 }
             ],
-            "order": [[ 0, "ase" ]]
+            "order": [[ 0, "ase" ]],
+            "scrollX": true
         } );
 
         $('.addRow').on('click', function(){
@@ -410,7 +431,7 @@
 	   				'<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
 	   				'<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
 	   				'</tr>';
-			$('tbody').append(tr);
+			$('#main-tbl tbody').append(tr);
 			$(".livesearch").chosen();
 			
 	};
