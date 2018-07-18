@@ -135,7 +135,38 @@
         $('#membersTable').DataTable( {
             dom: 'Bfrtip',
             buttons: [
-                'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excel',
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    exportOptions: {
+                        columns: [0,1,2,3,5]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    pageSize: 'LEGAL',  
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    exportOptions: {
+                        columns: [0,1,2,3,5]
+                    }
+                },
+                {
+                    extend: 'print',
+                    messageTop: function () {
+                        printCounter++;
+     
+                        if ( printCounter === 1 ) {
+                            return 'This is the first time you have printed this document.';
+                        }
+                        else {
+                            return 'You have printed this document '+printCounter+' times';
+                        }
+                    },
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    exportOptions: {
+                        columns: [0,1,2,3,5]
+                    }
+                }
             ]
             // "order": [[ 10, "desc" ]]
         });

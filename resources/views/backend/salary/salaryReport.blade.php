@@ -29,8 +29,8 @@
   </style>
 </head>
 <body>
-  
-  <h4 style="text-align: center;">Salary Statement- {{ $month }} {{ $year }} (Drawsting)</h4>
+  <h4 style="text-align: center;">MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh</h4>
+  <h5 style="text-align: center;">Salary Statement- {{ $month }} {{ $year }} (Drawsting)</h5>
   <table style="float: center;">
     <thead">
       <tr>
