@@ -149,7 +149,7 @@
     $myArr = [];
     if(sizeof($sizeQtn)>0){
         foreach($sizeQtn as $arr){
-            $myArr[] = ['supply_id' => $arr->supply_id, 'size_id'=> $arr->size_id, 'size_quantity' => $arr->size_quantity, 'sizeName' => $arr->sizeName->name] ;   
+            $myArr[] = ['id' => $arr->id, 'supply_id' => $arr->supply_id, 'size_id'=> $arr->size_id, 'size_quantity' => $arr->size_quantity, 'sizeName' => $arr->sizeName->name] ;   
         }
     }
     $myjson = json_encode($myArr);
@@ -173,11 +173,12 @@
                     '<select class="livesearch form-control product-name"  name="size[]" >';
                       $.each( pro, function( key, value ) {
                         // tr +='<option value="'+ jsonVal[x].size_id +'">'+ jsonVal[x].sizeName +'</option>';
-                        tr +='<option value="'+  value['id'] +'" ' + (value['id'] === jsonVal[x].size_id ? 'selected' : '') + '>'+ value['name'] +'</option>';
+                        tr +='<option value="'+  value['id'] +'" ' + ((value['id'] === jsonVal[x].size_id) ? 'selected' : '') + '>'+ value['name'] +'</option>';
                       });   	
                tr +=  '</select>'+ 
                  '</td>'+
                     '<td><input type="text" value="'+ jsonVal[x].size_quantity +'" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
+                    '<input type="hidden" value="'+ jsonVal[x].id +'" name="size_qtn_id[]" class="form-control qtn">'+
                     '<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
                     '</tr>';
 
@@ -194,14 +195,14 @@
         {
             var tr='<tr>'+
                         '<td>'+
-                        '<select class="livesearch form-control product-name"  name="size[]" >'+
+                        '<select class="livesearch form-control product-name"  name="size_new[]" >'+
                             '<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
                             $.each( JSON.parse(pro), function( key, value ) {
                                tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
                              });    
                       tr +=  '</select>'+ 
                         '</td>'+
-                        '<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
+                        '<td><input type="text" name="order_quantity_new[]" class="form-control qtn" onblur="qtn_check()"></td>'+
                         '<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
                         '</tr>';
                 $('#main-tbl tbody').append(tr);

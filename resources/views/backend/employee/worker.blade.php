@@ -106,7 +106,9 @@
 @endsection
 @section('style')
 <style>
-    
+    .content {
+        width: 80vw;
+    }
 </style>
 @endsection
 @section('script')
@@ -115,6 +117,7 @@
         var printCounter = 0;
      
         $('#membersTable').DataTable( {
+            "scrollX": true,
             dom: 'Bfrtip',
             buttons: [
                 {

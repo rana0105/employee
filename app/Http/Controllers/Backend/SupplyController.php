@@ -135,6 +135,7 @@ class SupplyController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
         $this->validate($request, [
             'product_id' => 'required',
             'buyer_name' => 'required',
@@ -146,39 +147,59 @@ class SupplyController extends Controller
             'from_date' => 'required',
             'to_date' => 'required'
         ]);
+
         $supply = Supply::find($id);
+
+        $supply->update($request->except(['supply_date', 'size', 'order_quantity']));
+
         $quantity = $request->order_quantity;
         $sizes = $request->size;
-        $supply->update($request->except(['supply_date', 'size', 'order_quantity']));
+
         if($supply){
-            foreach ($request->size as $key => $size) {
-                $sizeQuantity = SizeQuantity::where('supply_id', $id)->get();
-                if ($sizeQuantity->count() == count($request->order_quantity)) {
-                    foreach ($sizeQuantity as $keys => $value) {
-                        if ($value) {
-                            $value->supply_id = $supply->id;
-                            $value->product_id = $request->product_id;
-                            $value->size_id = $sizes[$keys];
-                            $value->size_quantity = $quantity[$keys];
-                            $value->last_quantity = $quantity[$keys];
-                            $value->save();
-                            return redirect()->route('supply.index')->with('success', 'Data have been updated!');
-                        }else{
-                            return redirect()->route('supply.index')->with('danger', 'Data have been not updated!');
-                        }
+            $sizeQuantity = SizeQuantity::where('supply_id', $id)->get();
+
+            foreach ($sizeQuantity as $keys => $value) {
+                if (in_array($value->id, $request->size_qtn_id) ) {
+                    if(isset($sizes[$keys])){
+                        $value->supply_id = $supply->id;
+                        $value->product_id = $request->product_id;
+                        $value->size_id = $sizes[$keys];
+                        $value->size_quantity = $quantity[$keys];
+                        $value->last_quantity = $quantity[$keys];
+                        $value->save();
                     }
+                    
                 }else{
+                    $value->delete();
+                    if (($keyValId = array_search($value->id, $request->size_qtn_id)) !== false) {
+                        unset($request->size_qtn_id[$keyValId]);
+                    }
+                }
+            }
+        }
+        
+        if($request->has('size_new') && $request->has('order_quantity_new')){
+            $this->validate($request, [
+                'size_new' => 'required',
+                'order_quantity_new' => 'required'
+            ]);
+
+            $quantity_new = $request->order_quantity_new;
+
+            if($supply){
+                foreach ($request->size_new as $key => $size) {
                     $quantitySize = new SizeQuantity();
                     $quantitySize->supply_id = $supply->id;
                     $quantitySize->product_id = $request->product_id;
                     $quantitySize->size_id = $size;
-                    $quantitySize->size_quantity = $quantity[$key];
-                    $quantitySize->last_quantity = $quantity[$key];
+                    $quantitySize->size_quantity = $quantity_new[$key];
+                    $quantitySize->last_quantity = $quantity_new[$key];
                     $quantitySize->save();
-                    return redirect()->route('supply.index')->with('success', 'Data have been updated!');
                 }
             }
         }
+
+        return redirect()->route('supply.index')->with('success', 'Data have been updated!');
     }
 
     /**
@@ -189,6 +210,14 @@ class SupplyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $supply = Supply::find($id);
+        SizeQuantity::where('supply_id', $id)->delete();
+        $supply->delete();
+        return redirect()->route('supply.index')->with('danger', 'Data have been deleted!');
+    }
+
+    public function remarkSupply($id, $inputData){
+        $supply = Supply::find($id);
+        $supply->update(['remark' => $inputData]);
     }
 }

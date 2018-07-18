@@ -22,6 +22,7 @@ Route::group( ['middleware' => ['auth']], function() {
     Route::post('deliveryDate', 'Backend\ProductController@deliveryDate')->name('deliveryDate');
     Route::resource('supply', 'Backend\SupplyController');
     Route::post('supply-date', 'Backend\SupplyController@supplyDate')->name('supply-date');
+    Route::get('remarkSupply/{id}/{inputData}', 'Backend\SupplyController@remarkSupply')->name('sremarkSupply');
     Route::resource('leave', 'Backend\LeaveController');
     Route::get('officeLeaves', 'Backend\LeaveController@officeLeaves')->name('officeLeaves');
     Route::get('floorLeaves', 'Backend\LeaveController@floorLeaves')->name('floorLeaves');

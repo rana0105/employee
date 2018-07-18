@@ -69,7 +69,7 @@
                           </thead>
                           <tbody>
                             @foreach($supplies as $supply)
-                            <tr>
+                            <tr supp-id="{{ $supply->id }}">
                               <td style="display: none;">{{ $supply->id }}</td>
                               <td>{{ $supply->buyer_name }}</td>
                               <td>{{ $supply->reference_no }}</td>
@@ -174,7 +174,12 @@
                                       </ul>
                                 </div>
                               </td>
-                              <td>Remark</td>
+                              <td class="remark center-block text-center">
+                                  @if('' == $supply->remark)
+                                    <i class="fa fa-2x fa-pencil"></i>
+                                  @endif
+                                  {{ str_limit($supply->remark, 10) }}
+                              </td>
                               <td>
                                 @can('edit_supply')
                                 <a href="{{ route('supply.edit', $supply->id) }}">
@@ -354,13 +359,37 @@
 </style>
 @endsection
 @section('script')
-{{--  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>  --}}
 <script>
     $(document).ready(function() {
-        $('.dropdown-toggle').on('show.bs.dropdown',function(){
-            alert('asd');
+        $('.remark').dblclick(function(){
+            if($('#remark_add').length > 0){
+                $('#remark_add').parent().html($('#remark_add').val());
+                $('#remark_add').remove();
+            }
+           $(this).html('<input value="'+$(this).text().trim()+'" type="text" class="form-control" name="remark" id="remark_add" size="">');
         });
+
+
+        $(document).on('keyup', '#remark_add', function(e){
+            var thisInp = $(this);
+            var suppId = thisInp.closest('tr').attr('supp-id');
+            if(e.which == 13){
+                var remarkVal = thisInp.val();
+                var url = '{{ route('sremarkSupply', [':supplyID', ':supplyVal']) }}/'+suppId+'/'+remarkVal;
+                url = url.replace(':supplyID/:supplyVal/', '');
+                $.ajax({
+                    url: url,
+                    success: function(){
+                        console.log('success');
+                        thisInp.closest('td').html(remarkVal);
+                    },
+                    error: function(){
+                        console.log('Error');
+                    }
+                });
+            }
+        });
+
         var printCounter = 0;
      
         $('#membersTable').DataTable( {
