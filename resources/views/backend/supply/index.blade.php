@@ -177,7 +177,7 @@
                               <td class="remark center-block text-center">
                                   @if('' == $supply->remark)
                                     <i class="fa fa-2x fa-pencil"></i>
-                                  @endif
+                                  @endif 
                                   {{ str_limit($supply->remark, 10) }}
                               </td>
                               <td>
