@@ -20,6 +20,7 @@ class CreateSizeQuantitiesTable extends Migration
             $table->integer('size_id')->unsigned()->index();
             $table->integer('size_quantity')->nullable();
             $table->integer('last_quantity')->nullable();
+            $table->integer('delivery_stock')->nullable();
             $table->timestamps();
         });
     }

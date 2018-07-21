@@ -93,23 +93,11 @@
                               <td>
                                   @if($supply->quantity->count() > 0)
                                       @foreach($supply->quantity as $lqtn)
-                                          @if($lqtn->last_quantity > 0)
-                                          <p><span class="badge badge-info">{{ $lqtn->last_quantity }} Available</span></p><br>
-                                          @elseif($lqtn->last_quantity < 0)
-                                          <p><span class="badge badge-warning">Delivery Stock</span></p><br>
-                                          @elseif($lqtn->last_quantity == 0)
-                                          <p><span class="badge badge-success">Paid</span></p><br>
-                                          @endif
+                                          <p><span class="badge badge-success">{{ $lqtn->last_quantity }} Available</span></p><br>
                                       @endforeach
                                   @endif
                               </td>
-                              <td>
-                                @if($supply->quantity->count() > 0)
-                                    @foreach($supply->quantity as $sizs)
-                                        <div class="">{{ $sizs->delivery_stock }}</div><br>
-                                    @endforeach
-                                @endif
-                              </td>
+                              <td></td>
                               <td>
                                 @php
                                 $fdate = $supply->from_date;
@@ -138,13 +126,56 @@
                               </td>
                               <td>
                                 <div class="btn-group">
-                                  <a class="btn btn-sm btn-info stockDelivery" data-toggle="modal" data-target="#addDelivery" data-id="{{ $supply->id }}">Deleivery</a>
-
+                                      <a class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" href="#" >
+                                          <span class="caret"><i class="fa fa-plus"></i></i></span>
+                                      </a>
+                                      <ul class="dropdown-menu style1">
+                                          <form action="{{ route('supply-date') }}" method="POST">
+                                              {{ csrf_field() }}
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                      <input type="hidden" name="supply_id" value="{{ $supply->id }}" required="" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                      <input type="date" name="supply_date" class="form-control" required="">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                          <select name="size_id" id="size_id" class="livesearch form-control" required="">
+                                                              <option value="0" disabled="true" selected="ture"></option>
+                                                                  @foreach($sizes as $size)
+                                                                      <option value="{{ $size->id }}">{{ $size->name }}</option>
+                                                                  @endforeach
+                                                          </select>
+                                                  </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                      <input type="number" name="supply_quantity" placeholder="Quantity" required="" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                      <input type="text" name="delivery_no" placeholder="Delivery No" required="" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                  <div class="col-sm-10">
+                                                      <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                                                  </div>  
+                                              </div>
+                                          </form>
+                                      </ul>
                                 </div>
                               </td>
                               <td class="remark center-block text-center">
-                                <a class="btn btn-sm btn-success addRemark" data-toggle="modal" data-target="#addRemark" data-id="{{ $supply->id }}">Remark</a><br/>
-                                {{$supply->remark}}
+                                  @if('' == $supply->remark)
+                                    <i class="fa fa-2x fa-pencil"></i>
+                                  @endif 
+                                  {{ str_limit($supply->remark, 10) }}
                               </td>
                               <td>
                                 @can('edit_supply')
@@ -297,7 +328,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                        <button type="submit" class="btn btn-success">Create</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
                         </div>
                     </div>
                     </form>
@@ -308,47 +339,9 @@
           </div>
       </div>
   </div>
-  <!-- Modal -->
-  <div class="modal fade" id="addDelivery" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h6>Add Delivery</h6>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="deliveryAdd">
-              
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal -->
-  <div class="modal fade" id="addRemark" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h6>Add Remark</h6>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="remarkAdd">
-              
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 @endsection
 @section('style')
 <style>
-    .deliveryStyle {
-        }
     ul.dropdown-menu.style1.show {
         padding: 15px;
     }
@@ -402,7 +395,7 @@
             buttons: [
                 {
                     extend: 'excel',
-                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [1,2,3,4,5,6,7,8,9,10,11,12,14]
                     }
@@ -411,14 +404,24 @@
                     extend: 'pdf',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',  
-                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [1,2,3,4,5,6,7,8,9,10,11,12,14]
                     }
                 },
                 {
                     extend: 'print',
-                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    messageTop: function () {
+                        printCounter++;
+     
+                        if ( printCounter === 1 ) {
+                            return 'This is the first time you have printed this document.';
+                        }
+                        else {
+                            return 'You have printed this document '+printCounter+' times';
+                        }
+                    },
+                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [1,2,3,4,5,6,7,8,9,10,11,12,14]
                     }
@@ -435,41 +438,28 @@
         });
 
         $('body').on('click', '.remove', function(){
-            var len = $('tbody tr').length;   
-                $(this).parent().parent().remove(); 
+            var len = $('tbody tr').length;		
+                $(this).parent().parent().remove();	
         });
     } );
 
     function addRow(pro)
-    {
-      var tr='<tr>'+
-              '<td>'+
-              '<select class="livesearch form-control product-name"  name="size[]" >'+
-                        '<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
-                        $.each( JSON.parse(pro), function( key, value ) {
-                 tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
-               });    
-                tr +=  '</select>'+ 
-                  '</td>'+
-              '<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
-              '<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
-              '</tr>';
-        $('#main-tbl tbody').append(tr);
-        $(".livesearch").chosen();
-    };
-
-    $(document).on('click', 'a.stockDelivery', function() {
-     var id = $(this).attr('data-id');
-     $.get('addDelivery/'+id, function(data){
-          $('#addDelivery').find('.deliveryAdd').first().html(data);
-      });
-   });
-
-    $(document).on('click', 'a.addRemark', function() {
-     var id = $(this).attr('data-id');
-     $.get('getRemark/'+id, function(data){
-          $('#addRemark').find('.remarkAdd').first().html(data);
-      });
-   });
+  	{
+  		var tr='<tr>'+
+  	   				'<td>'+
+  	   				'<select class="livesearch form-control product-name"  name="size[]" >'+
+                      	'<option value="0" disabled="trform-controlue" selected="ture">Select an Option</option>';
+                       	$.each( JSON.parse(pro), function( key, value ) {
+  						   tr +='<option value="'+ value['id'] +'">'+value['name'] +'</option>';
+  						 });   	
+          		  tr +=  '</select>'+ 
+              		'</td>'+
+  	   				'<td><input type="text" name="order_quantity[]" class="form-control qtn" onblur="qtn_check()"></td>'+
+  	   				'<td><a href="javascript:void(0)" class="btn btn-danger btn-sm remove"><i class="fa fa-times fa-lg" aria-hidden="true"></i></a></td>'+
+  	   				'</tr>';
+  			$('#main-tbl tbody').append(tr);
+  			$(".livesearch").chosen();
+  			
+  	};
 </script>
 @endsection

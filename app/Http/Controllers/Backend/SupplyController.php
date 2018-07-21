@@ -70,16 +70,26 @@ class SupplyController extends Controller
             }
         }
         return redirect()->route('supply.index')->with('success', 'Data have been save!');
-        // $product = Product::find($request->product_id);
-        // if($product->quantity > $request->order_quantity) {
-        //     $supply = Supply::create($request->except(['supply_date']));
-        //     if($supply){
-        //         $product->update(['quantity' => $product->quantity - $request->order_quantity ]);
-        //     }
-        //         return redirect()->route('supply.index')->with('success', 'Data have been save!');
-        // }else{
-        //     return redirect()->route('supply.index')->with('warning', 'This product amount not available at this moment!');
-        // }
+    }
+
+
+    public function addDelivery($id)
+    {
+        $supply = Supply::with('quantity')->find($id);
+        return view('backend.supply.delivery', compact('supply'));
+    }
+
+    public function getRemark($id)
+    {
+        $supply = Supply::find($id);
+        return view('backend.supply.getRemark', compact('supply'));
+    }
+
+    public function postRemark(Request $request, $id)
+    {
+        $supply = Supply::find($id);
+        $supply->update(['remark' => $request->remark]);
+        return redirect()->route('supply.index')->with('success', 'Remark have been save!');
     }
 
     /**
@@ -97,15 +107,18 @@ class SupplyController extends Controller
             'supply_quantity' => 'required',
             'delivery_no' => 'required'
         ]);
-
         $chekcQ = SizeQuantity::where('supply_id', $request->supply_id)->where('size_id', $request->size_id)->first();
-
         if($chekcQ->last_quantity >= $request->supply_quantity) {
             SupplyDate::create($request->all());
-            $chekcQ->where('size_id', $request->size_id)->update(['last_quantity'=> $request->supply_quantity]);
+            $chekcQ->where('supply_id', $request->supply_id)->where('size_id', $request->size_id)->update(['last_quantity'=> $chekcQ->last_quantity - $request->supply_quantity]);
             return redirect()->route('supply.index')->with('success', 'Supply information data have been save!');
         }else{
-            return redirect()->route('supply.index')->with('warning', 'This product amount not available for delivered!');
+            SupplyDate::create($request->all());
+            $chekcQ->where('supply_id', $request->supply_id)->where('size_id', $request->size_id)->update([
+                'last_quantity'=> $chekcQ->last_quantity - $request->supply_quantity,
+                'delivery_stock'=> $request->supply_quantity - $chekcQ->last_quantity
+            ]);
+            return redirect()->route('supply.index')->with('warning', 'This product amount delivered than order quantity!');
         }
     }
 
@@ -212,6 +225,7 @@ class SupplyController extends Controller
     {
         $supply = Supply::find($id);
         SizeQuantity::where('supply_id', $id)->delete();
+        SupplyDate::where('supply_id', $id)->delete();
         $supply->delete();
         return redirect()->route('supply.index')->with('danger', 'Data have been deleted!');
     }

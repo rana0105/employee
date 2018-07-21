@@ -11,7 +11,8 @@ class SizeQuantity extends Model
         'product_id',
         'size_id',
         'size_quantity',
-        'last_quantity'
+        'last_quantity',
+        'delivery_stock'
     ];
 
     public function sizeName()

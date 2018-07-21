@@ -360,7 +360,7 @@
             buttons: [
                 {
                     extend: 'excel',
-                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [0,1,2,3,4,5,6,7,8,9]
                     }
@@ -369,7 +369,7 @@
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',  
-                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [0,1,2,3,4,5,6,7,8,9]
                     }
@@ -386,7 +386,7 @@
                             return 'You have printed this document '+printCounter+' times';
                         }
                     },
-                    title: 'MN TEX 324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
+                    title: 'MN TEX' + '\n' + '324 Maynarbag, Hossain Market, Uttar Badda, Dhaka-1212, Bangladesh',
                     exportOptions: {
                         columns: [0,1,2,3,4,5,6,7,8,9]
                     }
